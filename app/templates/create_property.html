@@ -18,23 +18,25 @@
             <div class="form-group" style="display: flex; justify-content: space-between;">
                 <div style="flex: 1;">
                     <label for="bedrooms">No. of Bedrooms:</label>
-                    <input type="number" class="form-control" id="bedrooms" name="bedrooms" required>
+                    <input type="number" class="form-control" id="bedrooms" name="bedrooms" required min="0">
                 </div>
                 <div style="flex: 1;">
                     <label for="bathrooms">No. of Bathrooms:</label>
-                    <input type="number" class="form-control" id="bathrooms" name="bathrooms" required>
+                    <input type="number" class="form-control" id="bathrooms" name="bathrooms" required min="0">
                 </div>
             </div>
             <div class="form-group" style="display: flex; justify-content: space-between;">
                 <div style="flex: 1;">
                     <label for="price">Price:</label>
-                    <input type="number" class="form-control" id="price" name="price" required>
+                    <input type="number" class="form-control" id="price" name="price" required min="0">
                 </div>
                 <div style="flex: 1;">
                     <label for="type">Property Type:</label>
                     <select class="form-control" id="type" name="type" required>
                         <option value="House">House</option>
                         <option value="Apartment">Apartment</option>
+                        <option value="Condo">Condo</option>
+                        <option value="Townhouse">Townhouse</option>
                     </select>
                 </div>
             </div>
@@ -44,9 +46,42 @@
             </div>
             <div class="form-group">
                 <label for="photos" style="display: block;">Photos:</label>
-                <input type="file" class="form-control-file" id="photos" name="photos[]" accept="image/*" multiple required>
-            </div>
+                <label for="photos" class="custom-file-upload">Browse</label>
+                <input type="file" id="photos" name="photos[]" accept="image/*" multiple required style="display: none;" onchange="previewImages(event)">
+    <div id="image-preview"></div> <!-- Container for image previews -->
+</div>
             <button type="submit" class="btn btn-primary">Add Property</button>
         </form>
     </div>
-{% endblock %}
+    <script>
+        function previewImages(event) {
+            var preview = document.getElementById('image-preview');
+            preview.innerHTML = ''; // Clear previous previews
+            
+            var files = event.target.files; // Get selected files
+            
+            for (var i = 0; i < files.length; i++) {
+                var file = files[i];
+                
+                if (!file.type.startsWith('image/')) { // Check if the file is an image
+                    continue;
+                }
+                
+                var img = document.createElement('img'); // Create img element for preview
+                img.classList.add('preview-image');
+                img.file = file;
+                
+                preview.appendChild(img); // Append img element to preview container
+                
+                var reader = new FileReader(); // Create FileReader object to read the file
+                reader.onload = (function(aImg) { // Set onload event handler for FileReader
+                    return function(event) {
+                        aImg.src = event.target.result; // Set src attribute of the img element
+                    };
+                })(img);
+                reader.readAsDataURL(file); // Read the file as a Data URL
+            }
+        }
+    </script>
+    
+    {% endblock %}

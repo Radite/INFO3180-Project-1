@@ -6,19 +6,31 @@ This file contains the routes for your application.
 """
 
 from app import app
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, flash
 from .models import Property
 from . import db
 from app.forms import PropertyForm
+import os
+from werkzeug.utils import secure_filename
+from flask import send_from_directory
+
+
 
 UPLOAD_FOLDER = 'uploads'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
-# Function to check if file extension is allowed
 def allowed_file(filename):
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    print("Filename: ", filename)  # print the filename
+    has_dot = '.' in filename
+    print("Has dot: ", has_dot)  # print whether the filename has a dot
+    if has_dot:
+        extension = filename.rsplit('.', 1)[1].lower()
+        print("Extension: ", extension)  # print the extension
+        is_allowed = extension in ALLOWED_EXTENSIONS
+        print("Is allowed: ", is_allowed)  # print whether the extension is allowed
+        return is_allowed
+    return False
 
 
 ###
@@ -35,6 +47,10 @@ def home():
 def about():
     """Render the website's about page."""
     return render_template('about.html', name="Mary Jane")
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
 
@@ -62,12 +78,12 @@ def create_property():
         new_property = Property(
             title=title,
             address=address,
-            price=price,
+           price=price,
             type=type,
             description=description,
             bedrooms=bedrooms,
             bathrooms=bathrooms,
-            photos=','.join(photos)
+            photos=photos
         )
         db.session.add(new_property)
         db.session.commit()
@@ -75,7 +91,7 @@ def create_property():
         flash('Property added successfully!', 'success')
         return redirect('/properties')
 
-    return render_template('create_property.html')
+    return render_template('create_property.html', form=PropertyForm())
 
 @app.route('/properties')
 def list_properties():
