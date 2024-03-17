@@ -13,11 +13,10 @@ from app.forms import PropertyForm
 import os
 from werkzeug.utils import secure_filename
 from flask import send_from_directory
+from .config import Config
 
 
 
-UPLOAD_FOLDER = 'uploads'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 def allowed_file(filename):
@@ -50,7 +49,7 @@ def about():
 
 @app.route('/uploads/<filename>')
 def uploaded_file(filename):
-    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+    return send_from_directory(Config.UPLOAD_FOLDER, filename)  # Access UPLOAD_FOLDER from Config
 
 
 
@@ -69,22 +68,23 @@ def create_property():
         bathrooms = int(request.form.get('bathrooms'))
 
         # Handle file uploads
-        photos = []
-        if 'photos[]' in request.files:
+        photo = request.files['photos']
+        if photo and allowed_file(photo.filename):
             print("Photos field exists")  # print that the 'photos' field exists
+        
+            filename = secure_filename(photo.filename)
+            file_path = os.path.join(Config.UPLOAD_FOLDER, filename)  # Access UPLOAD_FOLDER from Config
+            print("File path: ", file_path)
 
-            for file in request.files.getlist('photos[]'):
-                print("File: ", file)  # print the file
-
-                if file and allowed_file(file.filename):
-                    filename = secure_filename(file.filename)
-                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                    
-                    # Ensure the directory exists
-                    os.makedirs(os.path.dirname(file_path), exist_ok=True)
-                    
-                    file.save(file_path)
-                    photos.append(file_path)
+            
+            # Ensure the directory exists
+            os.makedirs(os.path.dirname(file_path), exist_ok=True)
+            
+            photo.save(file_path)
+            photo_path = filename  # Store the filename only
+        else:
+            flash('Invalid file format for photo. Please upload a valid image file.', 'error')
+            return redirect(request.url)
         # Save data to the database
         new_property = Property(
             title=title,
@@ -94,7 +94,7 @@ def create_property():
             description=description,
             bedrooms=bedrooms,
             bathrooms=bathrooms,
-            photos=photos
+            photo=photo_path
         )
         db.session.add(new_property)
         db.session.commit()

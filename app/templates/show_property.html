@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% block main %}
     <div class="container">
         <h1>{{ property.title }}</h1>
         <p><strong>Address:</strong> {{ property.address }}</p>
@@ -12,9 +12,9 @@
         
         <h2>Photos</h2>
         <div class="row">
-            {% for photo in property.photos.split(',') %}
+            {% for photo in property.photo.split(',') %}
                 <div class="col-md-3">
-                    <img src="{{ photo }}" class="img-fluid" alt="Property Photo">
+                    <img src="{{ url_for('uploaded_file', filename=photo.replace('\\', '/')) }}" class="img-fluid" alt="Property Photo">
                 </div>
             {% endfor %}
         </div>

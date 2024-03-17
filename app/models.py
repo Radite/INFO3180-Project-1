@@ -9,4 +9,4 @@ class Property(db.Model):
     description = db.Column(db.Text, nullable=False)
     bedrooms = db.Column(db.Integer, nullable=False)
     bathrooms = db.Column(db.Integer, nullable=False)
-    photos = db.Column(db.String(500), nullable=False)
+    photo = db.Column(db.String(200), nullable=False)
