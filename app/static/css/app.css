@@ -112,3 +112,58 @@ h1 {
 .btn-view-property:hover {
     background-color: #18bca4; /* Light green color on hover */
 }
+
+.property-container {
+    margin-top: 50px;
+}
+
+.property-info {
+    padding: 20px;
+}
+
+.property-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.price-type {
+    margin-bottom: 10px;
+}
+
+
+.type-badge {
+    background-color: #fbbf23;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin-left: 10px;
+}
+
+.property-description {
+    margin-bottom: 20px;
+}
+
+.bed-bath {
+    margin-bottom: 20px;
+}
+
+.bedroom, .bathroom {
+    margin-bottom: 10px;
+}
+
+.property-address {
+    margin-bottom: 20px;
+}
+
+.contact-btn {
+    width: 100%;
+}
+
+.property-image {
+    height: 100%; /* Set height of the image container */
+    overflow: hidden; /* Hide overflow to prevent stretching */
+}
+
+.property-image img {
+    height: 100%; /* Make the image fill the height of its container */
+    object-fit: cover; /* Maintain aspect ratio and cover the container */
+}

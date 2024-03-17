@@ -1,24 +1,31 @@
 {% extends 'base.html' %}
 
 {% block main %}
-    <div class="container">
-        <h1>{{ property.title }}</h1>
-        <p><strong>Address:</strong> {{ property.address }}</p>
-        <p><strong>Price:</strong> ${{ property.price }}</p>
-        <p><strong>Type:</strong> {{ property.type }}</p>
-        <p><strong>Description:</strong> {{ property.description }}</p>
-        <p><strong># of Bedrooms:</strong> {{ property.bedrooms }}</p>
-        <p><strong># of Bathrooms:</strong> {{ property.bathrooms }}</p>
-        
-        <h2>Photos</h2>
-        <div class="row">
-            {% for photo in property.photo.split(',') %}
-                <div class="col-md-3">
-                    <img src="{{ url_for('uploaded_file', filename=photo.replace('\\', '/')) }}" class="img-fluid" alt="Property Photo">
+    <div class="container property-container">
+        <div class="card">
+            <div class="row no-gutters">
+                <div class="col-md-6">
+                    <div class="property-image">
+                        <img src="{{ url_for('uploaded_file', filename=property.photo.split(',')[0].replace('\\', '/')) }}" class="card-img" alt="Property Photo">
+                    </div>
                 </div>
-            {% endfor %}
+                <div class="col-md-6">
+                    <div class="card-body property-info">
+                        <h1 class="property-title">{{ property.title }}</h1>
+                        <div class="price-type">
+                            <span class="price-badge">$ {{ "{:,.0f}".format(property.price) }}</span>
+                            <span class="type-badge">{{ property.type }}</span>
+                        </div>
+                        <p class="property-description">{{ property.description }}</p>
+                        <div class="bed-bath">
+                            <p class="bedroom"><i class="fas fa-bed"></i> {{ property.bedrooms }} Bedrooms</p>
+                            <p class="bathroom"><i class="fas fa-bath"></i> {{ property.bathrooms }} Bathrooms</p>
+                        </div>
+                        <p class="property-address"><strong>Address:</strong> {{ property.address }}</p>
+                        <a href="#" class="btn btn-primary contact-btn mt-3">Email Realtor</a>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <a href="#" class="btn btn-primary mt-3">Email Realtor</a>
     </div>
 {% endblock %}
