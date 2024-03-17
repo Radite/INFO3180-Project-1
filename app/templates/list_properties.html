@@ -9,9 +9,9 @@
                     <img src="{{ url_for('uploaded_file', filename=property.photo.replace('\\', '/')) }}" class="card-img-top" alt="Property Photo">
                     <div class="card-body">
                         <h5 class="card-title">{{ property.title }}</h5>
-                        <p class="card-text">Address: {{ property.address }}</p>
-                        <p class="card-text">Price: ${{ property.price }}</p>
-                        <a href="{{ url_for('show_property', propertyid=property.id) }}" class="btn btn-primary">View Details</a>
+                        <p class="card-text"><i class="fas fa-map-marker-alt text-primary"></i> <span class="text-muted">{{ property.address }}</span></p>
+                        <p class="card-text"><span class="price-badge">$ {{ "{:,.0f}".format(property.price) }}</span></p>
+                        <a href="{{ url_for('show_property', propertyid=property.id) }}" class="btn btn-view-property">View Property</a>
                     </div>
                 </div>
             </div>

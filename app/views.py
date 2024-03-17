@@ -17,7 +17,7 @@ from .config import Config
 
 
 
-ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'webp'}
 
 def allowed_file(filename):
     print("Filename: ", filename)  # print the filename
@@ -64,8 +64,8 @@ def create_property():
         price = float(request.form.get('price'))
         type = request.form.get('type')
         description = request.form.get('description')
-        bedrooms = int(request.form.get('bedrooms'))
-        bathrooms = int(request.form.get('bathrooms'))
+        bedrooms = float(request.form.get('bedrooms'))
+        bathrooms = float(request.form.get('bathrooms'))
 
         # Handle file uploads
         photo = request.files['photos']
@@ -100,7 +100,6 @@ def create_property():
         db.session.commit()
 
         flash('Property added successfully!', 'success')
-        return redirect('/properties')
 
     return render_template('create_property.html', form=PropertyForm())
 

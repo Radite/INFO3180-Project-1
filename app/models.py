@@ -7,6 +7,6 @@ class Property(db.Model):
     price = db.Column(db.Float, nullable=False)
     type = db.Column(db.String(50), nullable=False)
     description = db.Column(db.Text, nullable=False)
-    bedrooms = db.Column(db.Integer, nullable=False)
-    bathrooms = db.Column(db.Integer, nullable=False)
+    bedrooms = db.Column(db.Float, nullable=False)
+    bathrooms = db.Column(db.Float, nullable=False)
     photo = db.Column(db.String(200), nullable=False)
