@@ -1,3 +1,25 @@
 body {
     padding-top: 5rem;
+    background-color: #f2f2f2
+
+}
+
+
+.property-form-container {
+    width: 60%;
+    margin: 0 auto; /* Center the form horizontally */
+    border: 1px solid #ccc; /* Add border */
+    background-color: #fff; 
+    border-radius: 10px; /* Rounded edges */
+    padding: 20px; 
+}
+
+.form-group {
+    margin-bottom: 20px; /* Add margin bottom for spacing */
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select {
+    margin-right: 10px; /* Adjust spacing between inputs */
 }
