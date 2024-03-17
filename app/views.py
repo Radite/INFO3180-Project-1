@@ -57,6 +57,9 @@ def uploaded_file(filename):
 @app.route('/properties/create', methods=['GET', 'POST'])
 def create_property():
     if request.method == 'POST':
+        print("POST method")  # print that the method is POST
+        print("Files in request: ", request.files)  # print the files in the request
+
         title = request.form.get('title')
         address = request.form.get('address')
         price = float(request.form.get('price'))
@@ -67,13 +70,21 @@ def create_property():
 
         # Handle file uploads
         photos = []
-        if 'photos' in request.files:
-            for file in request.files.getlist('photos'):
+        if 'photos[]' in request.files:
+            print("Photos field exists")  # print that the 'photos' field exists
+
+            for file in request.files.getlist('photos[]'):
+                print("File: ", file)  # print the file
+
                 if file and allowed_file(file.filename):
                     filename = secure_filename(file.filename)
-                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-                    photos.append(os.path.join(UPLOAD_FOLDER, filename))
-
+                    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    
+                    # Ensure the directory exists
+                    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+                    
+                    file.save(file_path)
+                    photos.append(file_path)
         # Save data to the database
         new_property = Property(
             title=title,
